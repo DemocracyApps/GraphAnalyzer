@@ -48,22 +48,14 @@ public class Main {
 
         try {
 
-            String s = "[0,{\"1\":{\"2\":{\"3\":{\"4\":[5,{\"6\":7}]}}}}]";
-            Object obj = parser.parse(s);
-            JSONArray array = (JSONArray) obj;
-            System.out.println("======the 2nd element of array======");
-            System.out.println(array.get(1));
-            System.out.println();
-
-            JSONObject obj2 = (JSONObject) array.get(1);
-            System.out.println("======field \"1\"==========");
-            System.out.println(obj2.get("1"));
+            Object obj;
+            JSONArray array;
 
             obj = parser.parse(contents);
             JSONObject o2 = (JSONObject) obj;
-            JSONArray ar2 = (JSONArray) o2.get("sets");
+            array = (JSONArray) o2.get("sets");
             System.out.println("My name is " + o2.get("name"));
-            System.out.println("And here's the array" + ar2.get(0));
+            System.out.println("And here's the array" + array.get(0));
 
         }
         catch (Exception e) {
