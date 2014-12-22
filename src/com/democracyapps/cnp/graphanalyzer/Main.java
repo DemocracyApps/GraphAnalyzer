@@ -76,13 +76,11 @@ public class Main {
             else {
                 try {
                     Task task;
-                    switch (taskType) {
-                        case "graphanalysis":
-                            task = new GraphAnalysisTask(taskConfiguration);
-                            break;
-                        default:
-                            task = new Task(taskConfiguration);
-                            break;
+                    if (taskType.equalsIgnoreCase("graphanalysis")) {
+                        task = new GraphAnalysisTask(taskConfiguration);
+                    }
+                    else {
+                        task = new Task(taskConfiguration);
                     }
 
                     Thread t = new Thread(task);
