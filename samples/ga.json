@@ -1,0 +1,27 @@
+{
+  "name":"George",
+  "tasks": [
+    {
+      "name":"Perky",
+      "type":"graphanalysis",
+      "trigger": "timer",
+      "interval":"15 s"
+      "dataprovider": {
+        "type":"generate",
+        "method":"silly"
+      },
+      "analysis": {
+        "type":"counts",
+        "some_parameter": 17,
+        "some_other_parameter": false,
+        "last_analysis_parameter": "hilda"
+      }
+    },
+    {
+      "name":"Plodder",
+      "type":"maintenance",
+      "trigger": "timer",
+      "interval": "1 m"
+    }
+  ]
+}

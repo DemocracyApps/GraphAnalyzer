@@ -26,6 +26,7 @@ public class GraphDataProvider extends DataProvider {
     public Graph getGraph() {
         return graph;
     }
+
     private Graph generateGraph (String method) {
         Graph g = null;
         if (method.equalsIgnoreCase("silly")) {
