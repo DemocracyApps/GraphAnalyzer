@@ -5,7 +5,7 @@
       "name":"Perky",
       "type":"graphanalysis",
       "trigger": "timer",
-      "interval":"15 s"
+      "interval":"15 s",
       "dataprovider": {
         "type":"generate",
         "method":"silly"
@@ -15,6 +15,19 @@
         "some_parameter": 17,
         "some_other_parameter": false,
         "last_analysis_parameter": "hilda"
+      }
+    },
+    {
+      "name": "Postgres",
+      "type": "graphanalysis",
+      "trigger": "timer",
+      "interval": "15 s",
+      "dataprovider": {
+        "type": "postgres"
+      },
+      "analysis": {
+        "type": "counts",
+        "some_parameter": 1
       }
     },
     {

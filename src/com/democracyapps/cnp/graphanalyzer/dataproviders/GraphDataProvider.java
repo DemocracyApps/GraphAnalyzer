@@ -23,9 +23,6 @@ public class GraphDataProvider extends DataProvider {
     public Object getData() {
         return graph;
     }
-    public Graph getGraph() {
-        return graph;
-    }
 
     private Graph generateGraph (String method) {
         Graph g = null;
