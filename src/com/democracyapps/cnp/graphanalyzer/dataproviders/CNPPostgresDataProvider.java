@@ -31,7 +31,7 @@ public class CNPPostgresDataProvider extends DataProvider {
 
         connection = DriverManager.getConnection(
                 "jdbc:postgresql://cnp.dev:5432/cnp", "ga",
-                "kegli85");
+                "graph01");
 
         if (connection == null) {
             throw new SQLException("Unable to create connection to PostgreSQL database");
