@@ -1,6 +1,7 @@
 package com.democracyapps.cnp.graphanalyzer;
 
 import com.democracyapps.cnp.graphanalyzer.tasks.GraphAnalysisTask;
+import com.democracyapps.cnp.graphanalyzer.tasks.TestingGraph;
 import com.democracyapps.cnp.graphanalyzer.tasks.RunningTask;
 import com.democracyapps.cnp.graphanalyzer.tasks.Task;
 import org.json.simple.JSONArray;
@@ -78,7 +79,7 @@ public class Main {
                     Task task;
                     switch (taskType) {
                         case "graphanalysis":
-                            task = new GraphAnalysisTask(taskConfiguration);
+                            task = new TestingGraph(taskConfiguration);
                             break;
                         default:
                             task = new Task(taskConfiguration);

@@ -1,4 +1,6 @@
 package com.democracyapps.cnp.graphanalyzer.graph;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Matrix class for rudimentary adjacency matrix graph representation
@@ -10,37 +12,107 @@ package com.democracyapps.cnp.graphanalyzer.graph;
 
 public class AdjMatrixGraph {
 
-    private int numNodes;
     private boolean directed;
+    private boolean weighted;
+    private ArrayList<Node> nodes;
+    private int numNodes;
     private double[][] edges;
-    private Node[] nodes;
+   // AdjMatrix adjMatrix;
 
-    public AdjMatrixGraph(Node[] newNodes) {
-        // builds an empty adjacency matrix for the given node array
-        numNodes = newNodes.length;
-        nodes = newNodes;
+    public AdjMatrixGraph(boolean directedGraph, boolean weightedGraph) {
+        directed = directedGraph;
+        weighted = weightedGraph;
+        nodes = new ArrayList<Node>(10);
+        numNodes = 0;
+      //  this.adjMatrix = this.new AdjMatrix();
         edges = new double[numNodes][numNodes];
     }
 
-    private int findNode (Node n) {
-        // returns the index of the node in the array
-        int i;
-        int ind = -1;
-        for (i=0; i<numNodes; i++) {
-            if (n.id == nodes[i].id) {
-                ind = i;
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public boolean isWeighted() {
+        return  weighted;
+    }
+
+    public void setDirected(boolean bool) {
+        if (bool) {
+            directed = true;
+        } else {
+            if (directed) {
+                int i, j;
+                for (i = 0; i < numNodes; i++) {
+                    for (j = i; j < numNodes; j++) {
+                        if ((edges[i][j] > 0) && (edges[j][i] > 0)) {
+                            edges[i][j] = (edges[i][j] + edges[j][i]) / 2;
+                            edges[j][i] = 0;
+                        } else if (edges[i][j] == 0) {
+                            edges[i][j] = edges[j][i];
+                            edges[j][i] = 0;
+                        }
+                    }
+                }
+            }
+            directed = false;
+        }
+    }
+
+    public void setWeighted(boolean bool) {
+        if (bool) {
+            weighted = true;
+        } else {
+            if (weighted) {
+                int i, j;
+                for (i = 0; i < numNodes; i++) {
+                    for (j = 0; j < numNodes; j++) {
+                        if (edges[i][j] > 0) {
+                            edges[i][j] = 1;
+                        }
+                    }
+                }
+            }
+            weighted = false;
+        }
+
+    }
+
+    public void addNode (Node n) {
+        // adds the node to the node array, but does NOT automatically
+        // update the matrix, must call updateMatrix after adding nodes
+        nodes.ensureCapacity(numNodes);
+        nodes.add(numNodes,n);
+        numNodes++;
+    }
+
+    public void addEdge (Node n1, Node n2) {
+        // for unweighted graphs
+        int ind1 = nodes.indexOf(n1);
+        int ind2 = nodes.indexOf(n2);
+        if ((ind1 == -1)||(ind2 == -1)) {
+            System.out.println("These two nodes aren't in the graph.");
+        }
+        if (directed) {
+            edges[ind1][ind2] = 1;
+        } else {
+            if (ind1 < ind2) {
+                edges[ind1][ind2] = 1;
+            } else {
+                edges[ind2][ind1] = 1;
             }
         }
-        if (ind == -1) {
-            System.out.println("The node is not in the graph.\n");
-        }
-        return ind;
     }
 
     public void addEdge (Node n1, Node n2, double weight) {
-        // adds an edge from n1 to n2
-        int ind1 = findNode(n1);
-        int ind2 = findNode(n2);
+        // for weighted graphs
+        if (!weighted && weight<1) {
+            System.out.println("warning: weighted edge in an unweighted graph");
+        }
+        int ind1 = nodes.indexOf(n1);
+        int ind2 = nodes.indexOf(n2);
+        if ((ind1 == -1)||(ind2 == -1)) {
+            System.out.println("These two nodes aren't in the graph.");
+        }
         if (directed) {
             edges[ind1][ind2] = weight;
         } else {
@@ -53,9 +125,11 @@ public class AdjMatrixGraph {
     }
 
     public void removeEdge (Node n1, Node n2) {
-        // removes the edge from n1 to n2
-        int ind1 = findNode(n1);
-        int ind2 = findNode(n2);
+        int ind1 = nodes.indexOf(n1);
+        int ind2 = nodes.indexOf(n2);
+        if ((ind1 == -1)||(ind2 == -1)) {
+            System.out.println("These two nodes aren't in the graph.");
+        }
         if (directed) {
             edges[ind1][ind2] = 0;
         } else {
@@ -67,22 +141,34 @@ public class AdjMatrixGraph {
         }
     }
 
+    public void updateMatrix () {
+        // must run after adding new nodes before new edges can be added
+        double[][] oldEdges = edges;
+        edges = new double[numNodes][numNodes];
+        int i,j;
+        for (i=0; i<oldEdges.length; i++) {
+            for (j=0; j<oldEdges.length; j++) {
+                double w = oldEdges[i][j];
+                edges[i][j] = w;
+            }
+        }
+    }
 
     public int countEdges() {
         int count = 0;
-        int i,j;
+        int i, j;
         if (directed) {
             for (i = 0; i < numNodes; i++) {
                 for (j = 0; j < numNodes; j++) {
-                    if (edges[i][j]>0) {
-                    count++;
+                    if (edges[i][j] > 0) {
+                        count++;
                     }
                 }
             }
         } else {
             for (i = 0; i < numNodes; i++) {
                 for (j = i; j < numNodes; j++) {
-                    if (edges[i][j]>0) {
+                    if (edges[i][j] > 0) {
                         count++;
                     }
                 }
@@ -91,13 +177,86 @@ public class AdjMatrixGraph {
         return count;
     }
 
-    public void printAdjMatrix () {
-        int i,j;
-        for (i=0; i<numNodes; i++) {
-            for (j=0; j<numNodes; j++) {
-                System.out.println( Double.toString(edges[i][j]) + " ");
+    public double edgeWeight(Node n1,Node n2) {
+        int ind1 = nodes.indexOf(n1);
+        int ind2 = nodes.indexOf(n2);
+        if ((ind1 == -1) || (ind2 == -1)) {
+            System.out.println("A node is missing from the graph.");
+            return -1;
+        } else {
+            if (directed) {
+                return edges[ind1][ind2];
+            } else {
+                if (ind1 < ind2) {
+                    return edges[ind1][ind2];
+                } else {
+                    return edges[ind2][ind1];
+                }
             }
-            System.out.println("\n");
         }
     }
+
+    public void printAdjMatrix() {
+        int i, j;
+        for (i = 0; i < numNodes; i++) {
+            for (j = 0; j < numNodes; j++) {
+                System.out.print(Double.toString(edges[i][j]) + " ");
+            }
+            System.out.print("\n");
+        }
+    }
+
+    public void printNodes() {
+        for (Node n : nodes) {
+            System.out.println(n.content);
+        }
+        System.out.println("there are " + Integer.toString(numNodes) + " nodes");
+
+    }
+
+    public void runTests() {
+        if (this.isDirected()) {System.out.println("graph is directed"); } else {System.out.println("graph is not directed");}
+        this.setDirected(false);
+        if (this.isDirected()) {System.out.println("graph is directed"); } else {System.out.println("graph is not directed");}
+        this.setDirected(true);
+        if (this.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
+        this.setWeighted(false);
+        if (this.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
+        this.setWeighted(true);
+        if (this.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
+
+        Node n1 = this.nodes.get(0);
+        Node n2 = this.nodes.get(1);
+        Node n3 = this.nodes.get(2);
+
+        this.addEdge(n1,n2,.1);
+        this.addEdge(n1,n3,.5);
+        this.addEdge(n3,n2);
+        this.printAdjMatrix();
+        System.out.println("there are currently " +
+                Integer.toString(this.countEdges()) + " edges");
+
+        if (this.edgeWeight(n1,n2)>0) {
+            System.out.println("n1 and n2 are connected with weight "
+                    + Double.toString(this.edgeWeight(n1, n2)));
+        } else {
+            System.out.println("n1 and n2 are not connected");
+        }
+
+        this.removeEdge(n1,n2);
+        if (this.edgeWeight(n1,n2)>0) {
+            System.out.println("n1 and n2 are connected with weight "
+                    + Double.toString(this.edgeWeight(n1, n2)));
+        } else {
+            System.out.println("n1 and n2 are not connected");
+        }
+
+        this.printAdjMatrix();
+        this.setDirected(false);
+        this.setWeighted(false);
+        this.printAdjMatrix();
+
+
+    }
 }
+

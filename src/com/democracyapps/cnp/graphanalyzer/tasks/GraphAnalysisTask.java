@@ -3,6 +3,7 @@ package com.democracyapps.cnp.graphanalyzer.tasks;
 
 import com.democracyapps.cnp.graphanalyzer.Main;
 import com.democracyapps.cnp.graphanalyzer.dataproviders.GraphDataProvider;
+import com.democracyapps.cnp.graphanalyzer.graph.AdjMatrixGraph;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import org.json.simple.JSONObject;
 
@@ -25,7 +26,7 @@ public class GraphAnalysisTask extends Task {
 
     @Override
     public void run() {
-        Graph graph = null;
+        AdjMatrixGraph graph = null;
         GraphDataProvider gdp = new GraphDataProvider ();
         gdp.initialize(dataProviderSpecification);
         graph = gdp.getGraph();
@@ -35,9 +36,8 @@ public class GraphAnalysisTask extends Task {
         String analysisType = (String) analysisSpecification.get("type");
 
         if (analysisType.equalsIgnoreCase("counts")) {
-            int edgeCount = graph.countEdges();
-            int nodeCount = graph.countNodes();
-            System.out.println("The counts from " + this.name + " are " + nodeCount + " nodes and " + edgeCount + " edges.");
+            boolean dir = graph.isDirected();
+            if (dir) {System.out.println("the graph is directed");}
         }
     }
 }
