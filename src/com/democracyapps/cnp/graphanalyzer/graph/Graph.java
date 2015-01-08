@@ -21,11 +21,16 @@ public class Graph {
         edges.put(e.id, e);
     }
 
+    public void removeEdge (Edge e) {
+        edges.remove(e.id);
+    }
+
     public Node getNode(long id) {
         Node n = null;
         if (nodes.containsKey(id)) n = nodes.get(id);
         return n;
     }
+
     public Edge getEdge(long id) {
         Edge e = null;
         if (edges.containsKey(id)) e = edges.get(id);
@@ -46,10 +51,6 @@ public class Graph {
         return result;
     }
 
-    public int countEdges() {
-        return this.edges.size();
-    }
-
     public ArrayList<Edge> getAllEdges() {
         ArrayList<Edge> result = new ArrayList<Edge>();
         Iterator<Long> iter = this.edges.keySet().iterator();
@@ -58,5 +59,10 @@ public class Graph {
             result.add(this.edges.get(id));
         }
         return result;
+    }
+
+
+    public int countEdges() {
+        return this.edges.size();
     }
 }
