@@ -37,7 +37,7 @@ public class Graph {
     }
 
     public ArrayList<Node> getAllNodes() {
-        ArrayList<Node> result = new ArrayList<>();
+        ArrayList<Node> result = new ArrayList<Node>();
         Iterator<Long> iter = this.nodes.keySet().iterator();
         while (iter.hasNext()) {
             Long id = iter.next();
@@ -51,7 +51,7 @@ public class Graph {
     }
 
     public ArrayList<Edge> getAllEdges() {
-        ArrayList<Edge> result = new ArrayList<>();
+        ArrayList<Edge> result = new ArrayList<Edge>();
         Iterator<Long> iter = this.edges.keySet().iterator();
         while (iter.hasNext()) {
             Long id = iter.next();

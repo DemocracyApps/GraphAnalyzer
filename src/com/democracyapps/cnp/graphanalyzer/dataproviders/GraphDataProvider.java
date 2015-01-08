@@ -22,9 +22,6 @@ public class GraphDataProvider extends DataProvider {
     public Object getData() {
         return graph;
     }
-    public AdjMatrixGraph getGraph() {
-        return graph;
-    }
 
     private AdjMatrixGraph generateGraph (String method) {
         AdjMatrixGraph g;

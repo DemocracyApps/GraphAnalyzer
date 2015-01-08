@@ -17,14 +17,12 @@ public class AdjMatrixGraph {
     private ArrayList<Node> nodes;
     private int numNodes;
     private double[][] edges;
-   // AdjMatrix adjMatrix;
 
     public AdjMatrixGraph(boolean directedGraph, boolean weightedGraph) {
         directed = directedGraph;
         weighted = weightedGraph;
         nodes = new ArrayList<Node>(10);
         numNodes = 0;
-      //  this.adjMatrix = this.new AdjMatrix();
         edges = new double[numNodes][numNodes];
     }
 
