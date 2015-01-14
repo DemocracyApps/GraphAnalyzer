@@ -10,4 +10,8 @@ public class Node {
         this.type = type;
         this.content = content;
     }
+
+    public long getId() {
+        return this.id;
+    }
 }

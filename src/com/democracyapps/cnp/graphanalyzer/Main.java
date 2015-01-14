@@ -1,9 +1,9 @@
 package com.democracyapps.cnp.graphanalyzer;
 
 import com.democracyapps.cnp.graphanalyzer.tasks.GraphAnalysisTask;
-import com.democracyapps.cnp.graphanalyzer.tasks.TestingGraph;
 import com.democracyapps.cnp.graphanalyzer.tasks.RunningTask;
 import com.democracyapps.cnp.graphanalyzer.tasks.Task;
+import com.democracyapps.cnp.graphanalyzer.tasks.TestingGraphTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -79,8 +79,9 @@ public class Main {
                     Task task;
                     if (taskType.equalsIgnoreCase("graphanalysis")) {
                         task = new GraphAnalysisTask(taskConfiguration);
-                    }
-                    else {
+                    } else if (taskType.equalsIgnoreCase("test")) {
+                        task = new TestingGraphTask(taskConfiguration);
+                    } else {
                         task = new Task(taskConfiguration);
                     }
 

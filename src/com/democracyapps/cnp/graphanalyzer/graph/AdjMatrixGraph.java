@@ -8,7 +8,6 @@ import java.util.Iterator;
  * Matrix class for rudimentary adjacency matrix graph representation
  * Node size is fixed, but edges can be added or subtracted at will
  * If the graph is directed, then edges extend from the row node to the column node
- * If the graph is undirected, just the upper triangular matrix is stored
  */
 
 
@@ -16,10 +15,8 @@ public class AdjMatrixGraph extends Graph{
 
     private boolean directed;
     private boolean weighted;
-    /*private ArrayList<Node> nodes;
-    private ArrayList<Edge> edges; */
     private int numNodes;
-    private ArrayList<Long>nodeOrder;
+    private ArrayList<Long> nodeOrder;
     private double[][] adjMatrix;
 
     public AdjMatrixGraph(boolean directedGraph, boolean weightedGraph) {
@@ -33,10 +30,13 @@ public class AdjMatrixGraph extends Graph{
     }
 
     public AdjMatrixGraph(Graph g) {
-        directed = true;
+        directed = false;
         weighted = false;
+        this.nodes = g.nodes;
+        this.edges = g.edges;
         numNodes = nodes.size();
         adjMatrix = new double[numNodes][numNodes];
+        nodeOrder = new ArrayList<Long>();
         for(long n : nodes.keySet()) {
             nodeOrder.add(n);
         }
@@ -63,10 +63,11 @@ public class AdjMatrixGraph extends Graph{
                     for (j = i; j < numNodes; j++) {
                         if ((adjMatrix[i][j] > 0) && (adjMatrix[j][i] > 0)) {
                             adjMatrix[i][j] = (adjMatrix[i][j] + adjMatrix[j][i]) / 2;
-                            adjMatrix[j][i] = 0;
-                        } else if (adjMatrix[i][j] == 0) {
+                            adjMatrix[j][i] = (adjMatrix[i][j] + adjMatrix[j][i]) / 2;
+                        } else if (adjMatrix[i][j] >= 0) {
+                            adjMatrix[j][i] = adjMatrix[i][j];
+                        } else if (adjMatrix[j][i] >= 0) {
                             adjMatrix[i][j] = adjMatrix[j][i];
-                            adjMatrix[j][i] = 0;
                         }
                     }
                 }
@@ -94,6 +95,7 @@ public class AdjMatrixGraph extends Graph{
 
     }
 
+    @Override
     public void addEdge (Edge e) {
         // for unweighted graphs
         edges.put(e.id, e);
@@ -105,11 +107,8 @@ public class AdjMatrixGraph extends Graph{
         if (directed) {
             adjMatrix[ind1][ind2] = 1;
         } else {
-            if (ind1 < ind2) {
-                adjMatrix[ind1][ind2] = 1;
-            } else {
-                adjMatrix[ind2][ind1] = 1;
-            }
+            adjMatrix[ind1][ind2] = 1;
+            adjMatrix[ind2][ind1] = 1;
         }
     }
 
@@ -126,14 +125,12 @@ public class AdjMatrixGraph extends Graph{
         if (directed) {
             adjMatrix[ind1][ind2] = weight;
         } else {
-            if (ind1 < ind2) {
-                adjMatrix[ind1][ind2] = weight;
-            } else {
-                adjMatrix[ind2][ind1] = weight;
-            }
+            adjMatrix[ind1][ind2] = weight;
+            adjMatrix[ind2][ind1] = weight;
         }
     }
 
+    @Override
     public void removeEdge (Edge e) {
         int ind1 = nodeOrder.indexOf(e.from);
         int ind2 = nodeOrder.indexOf(e.to);
@@ -143,11 +140,8 @@ public class AdjMatrixGraph extends Graph{
         if (directed) {
             adjMatrix[ind1][ind2] = 0;
         } else {
-            if (ind1 < ind2) {
-                adjMatrix[ind1][ind2] = 0;
-            } else {
-                adjMatrix[ind2][ind1] = 0;
-            }
+            adjMatrix[ind1][ind2] = 0;
+            adjMatrix[ind2][ind1] = 0;
         }
         edges.remove(e.id);
     }
@@ -165,7 +159,6 @@ public class AdjMatrixGraph extends Graph{
         }
     }
 
-
     public void printAdjMatrix() {
         int i, j;
         for (i = 0; i < numNodes; i++) {
@@ -182,6 +175,14 @@ public class AdjMatrixGraph extends Graph{
         }
         System.out.println("there are " + Integer.toString(numNodes) + " nodes");
 
+    }
+
+    public int getNumNodes() {
+        return  numNodes;
+    }
+
+    public double[][] getAdjMatrix() {
+        return adjMatrix;
     }
 
 }
