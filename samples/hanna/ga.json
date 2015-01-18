@@ -1,0 +1,43 @@
+{
+  "name":"George",
+  "tasks": [
+    {
+      "name":"Perky",
+      "type":"graphanalysis",
+      "trigger": "timer",
+      "interval":"15 s",
+      "dataprovider": {
+        "type":"generate",
+        "method":"Erdos"
+      },
+      "analysis": {
+        "type":"printmatrix",
+        "some_parameter": 17,
+        "some_other_parameter": false,
+        "last_analysis_parameter": "hilda"
+      }
+    },
+    {
+      "name":"Perky2",
+      "type":"graphanalysis",
+      "trigger": "timer",
+      "interval":"15 s",
+      "dataprovider": {
+        "type":"generate",
+        "method":"Erdos"
+      },
+      "analysis": {
+        "type":"maxdegree",
+        "some_parameter": 17,
+        "some_other_parameter": false,
+        "last_analysis_parameter": "hilda"
+      }
+    },
+    {
+      "name":"Plodder",
+      "type":"maintenance",
+      "trigger": "timer",
+      "interval": "1 m"
+    }
+  ]
+}
