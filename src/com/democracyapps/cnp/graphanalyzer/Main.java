@@ -34,6 +34,7 @@ public class Main {
 
     public static void main(String[] args) {
         Logger mainLogger = null;
+        String mode = "file";
 
         if (args.length < 1) {
             System.err.println("GraphAnalyzer usage:  graphanalyzer run-directory");
@@ -49,6 +50,7 @@ public class Main {
             mainLogger.info("GraphAnalyzer main - starting up in run directory: " + args[0]);
 
             configuration = readConfigurationFile(runDirectory + "/ga.json");
+            mode = (String) configuration.get("mode");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -56,41 +58,57 @@ public class Main {
         }
 
         /*
-         * Now pull out and run all the tasks in the configuration file.
+         * Now get and run all the tasks.
          *
          * Later we'll actually pay attention to the trigger for these and turn this process into a
          * service that runs tasks as their turns come up, but for initial development there's no point.
          * We'll just run through the array of tasks, kick them all off, and then wait for them to finish.
          */
 
-        Main.mainLogger.info("Running tasks from configuration " + configuration.get("name"));
-        JSONArray array = (JSONArray) configuration.get("tasks");
+        ArrayList<RunningTask> allTasks = null;
 
-        ArrayList<RunningTask> allTasks = new ArrayList<RunningTask>();
+        if (mode.equalsIgnoreCase("db")) {
 
-        for (int i=0; i<array.size(); ++i) {
-            JSONObject taskConfiguration = (JSONObject) array.get(i);
-            String taskType = (String) taskConfiguration.get("type");
-            if (taskType == null) {
-                mainLogger.severe("No type specified for task " + (String) taskConfiguration.get("name"));
+        }
+        else if (mode.equalsIgnoreCase("file")) {
+            String tasksFile = (String) configuration.get("tasks_file");
+            JSONArray array = null;
+
+            try {
+                JSONObject tasksConfiguration = readConfigurationFile(runDirectory + "/" + tasksFile);
+
+                Main.mainLogger.info("Running tasks from configuration " + tasksConfiguration.get(tasksFile));
+                array = (JSONArray) tasksConfiguration.get("tasks");
             }
-            else {
-                try {
-                    Task task;
-                    if (taskType.equalsIgnoreCase("graphanalysis")) {
-                        task = new GraphAnalysisTask(taskConfiguration);
-                    } else if (taskType.equalsIgnoreCase("test")) {
-                        task = new TestingGraphTask(taskConfiguration);
-                    } else {
-                        task = new Task(taskConfiguration);
-                    }
+            catch (Exception e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
 
-                    Thread t = new Thread(task);
-                    t.start();
-                    allTasks.add(new RunningTask(task, t));
-                }
-                catch (Exception e) {
-                    mainLogger.severe ("Failed to run task " + (String) taskConfiguration.get("name"));
+            allTasks = new ArrayList<RunningTask>();
+
+            for (int i = 0; i < array.size(); ++i) {
+                JSONObject taskConfiguration = (JSONObject) array.get(i);
+                String taskType = (String) taskConfiguration.get("type");
+                if (taskType == null) {
+                    mainLogger.severe("No type specified for task " + (String) taskConfiguration.get("name"));
+                } else {
+                    try {
+                        Task task;
+                        if (taskType.equalsIgnoreCase("graphanalysis")) {
+                            task = new GraphAnalysisTask(taskConfiguration);
+                        } else if (taskType.equalsIgnoreCase("test")) {
+                            task = new TestingGraphTask(taskConfiguration);
+                        } else {
+                            task = new Task(taskConfiguration);
+                        }
+
+                        Thread t = new Thread(task);
+                        t.start();
+                        allTasks.add(new RunningTask(task, t));
+                    } catch (Exception e) {
+                        mainLogger.severe("Failed to run task " + (String) taskConfiguration.get("name"));
+                    }
                 }
             }
         }
