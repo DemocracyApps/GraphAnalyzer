@@ -25,13 +25,14 @@ public class AnalysisTask extends Task {
         super(workspace);
         parameters = new ParameterSet(taskSpecification);
         id = parameters.getStringParam("id");
+        name = parameters.getStringParam("name");
         project = parameters.getIntegerParam("project");
         dataSourceName = parameters.getStringParam("dataSourceName");
         dataSourceType = parameters.getStringParam("dataSourceType");
         analysis = createAnalysis();
     }
 
-    public AnalysisTask(Workspace workspace, String analysisId, Integer projectId, String analysisSpecification) throws Exception {
+    public AnalysisTask(Workspace workspace, String name, String analysisId, Integer projectId, String analysisSpecification) throws Exception {
         super(workspace);
         parameters = new ParameterSet();
         id = analysisId;

@@ -1,8 +1,8 @@
 {
-  "tasksSource":"db",
+  "tasksSource":"file",
   "daemon":false,
-  "db_connection":"jdbc:postgresql://cnp.dev:5432/cnp",
-  "db_user":"ga",
-  "db_password":"graph01",
-  "tasks_file":"generatortasks.json"
+  "dbConnection":"jdbc:postgresql://cnp.dev:5432/cnp",
+  "dbUser":"ga",
+  "dbPassword":"graph01",
+  "tasksFile":"allTasks.json"
 }

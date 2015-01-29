@@ -74,7 +74,7 @@ public class CNPDatabaseAccessor {
             while (rs.next()) {
                 String id = ((Integer) rs.getInt("id")).toString();
 
-                allAnalysisTasks.add(new AnalysisTask(workspace, id, rs.getInt("project"), rs.getString("specification")));
+                allAnalysisTasks.add(new AnalysisTask(workspace, rs.getString("name"), id, rs.getInt("project"), rs.getString("specification")));
 
             }
             rs.close();

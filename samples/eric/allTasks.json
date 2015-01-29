@@ -1,0 +1,28 @@
+{
+  "analyses": [
+    {
+      "id": "1",
+      "name": "Perky",
+      "project": -1,
+      "dataSourceType":"db",
+      "analysis": {
+        "type": "HannaTest",
+        "count": 10
+      }
+    },
+    {
+      "id": "2",
+      "name": "Generator Test",
+      "project": -1,
+      "dataSourceType": "generator",
+      "dataSourceName": "RandomGraph",
+      "RandomGraph": {
+        "method": "Erdos"
+      },
+      "analysis": {
+        "type": "HannaTest",
+        "count": 17
+      }
+    }
+  ]
+}

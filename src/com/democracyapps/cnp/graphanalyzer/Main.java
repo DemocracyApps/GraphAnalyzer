@@ -19,7 +19,7 @@ public class Main {
     static Workspace workspace = null;
 
     public static void main(String[] args) {
-        String runDirectory = null;
+        String runDirectory;
         String tasksSource = null;
         Boolean daemon = false, keepRunning = true;
 
@@ -40,11 +40,15 @@ public class Main {
 
             tasksSource = workspace.getStringParameter("main.tasksSource");
             daemon = workspace.getBooleanParameter("main.daemon");
+            if (daemon == null) daemon = false;
 
-            if (workspace.getStringParameter("main.db_connection") != null) {
-                workspace.setDatabaseAccessor(new CNPDatabaseAccessor(workspace.getStringParameter("main.db_connection"),
-                        workspace.getStringParameter("main.db_user"),
-                        workspace.getStringParameter("main.db_password")));
+            if (workspace.getStringParameter("main.dbConnection") != null) {
+                workspace.setDatabaseAccessor(new CNPDatabaseAccessor(workspace.getStringParameter("main.dbConnection"),
+                        workspace.getStringParameter("main.dbUser"),
+                        workspace.getStringParameter("main.dbPassword")));
+            }
+            else {
+                System.out.println("No database connection information found - you will not be able to read tasks or data from the CNP database");
             }
         }
         catch (Exception e) {
@@ -65,7 +69,7 @@ public class Main {
                 if (tasksSource.equalsIgnoreCase("db")) {
                     newAnalysisTasks = workspace.getDatabaseAccessor().loadNewTasks(daemon, workspace);
                 } else if (tasksSource.equalsIgnoreCase("file")) {
-                    newAnalysisTasks = loadTasksFromFile(runDirectory, workspace.getStringParameter("main.tasks_file"), workspace);
+                    newAnalysisTasks = loadTasksFromFile(runDirectory, workspace.getStringParameter("main.tasksFile"), workspace);
                 }
                 else {
                     workspace.logger.severe("Unknown tasksSource " + tasksSource + ". Exiting ...");

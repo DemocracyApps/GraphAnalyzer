@@ -15,7 +15,6 @@ public class HannaTestAnalysis extends Analysis {
     @Override
     public void initialize(Workspace w, ParameterSet p) {
         super.initialize(w, p);
-        System.out.println("Created a TEST ANALYSIS!!!");
     }
 
     @Override
