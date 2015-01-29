@@ -1,0 +1,14 @@
+{
+  "analyses": [
+    {
+      "id": "1",
+      "name": "Perky",
+      "project": -1,
+      "dataSourceType":"db",
+      "analysis": {
+        "type": "HannaTest",
+        "count": 10
+      }
+    }
+  ]
+}

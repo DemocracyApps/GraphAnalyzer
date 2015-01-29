@@ -1,31 +1,25 @@
 package com.democracyapps.cnp.graphanalyzer.tasks;
 
-import org.json.simple.JSONObject;
+import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 
-public class Task implements Runnable {
-    JSONObject configuration        = null;
-    String name                     = null;
-    Trigger trigger                 = Trigger.NONE;
+/**
+ * Created by ericjackson on 1/29/15.
+ */
+abstract public class Task implements Runnable {
+    Thread thread                   = null;
+    Workspace workspace             = null;
 
-
-    public Task (JSONObject taskConfiguration) {
-        configuration = taskConfiguration;
-        name = (String) taskConfiguration.get("name");
-        trigger = Trigger.valueOf(((String) configuration.get("trigger")).toUpperCase());
+    public Task (Workspace w) {
+        workspace = w;
     }
 
-    @Override
-    public void run() {
-        Thread.currentThread().setName("Task Thread " + this.name);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Hello from thread " + Thread.currentThread().getName());
+    public void start() {
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
-    public String getName() {
-        return name;
+    public Thread getThread() {
+        return thread;
     }
+
 }

@@ -1,53 +1,26 @@
-package com.democracyapps.cnp.graphanalyzer.dataproviders;
+package com.democracyapps.cnp.graphanalyzer.data.providers;
 
+import com.democracyapps.cnp.graphanalyzer.data.CNPDatabaseAccessor;
+import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 import com.democracyapps.cnp.graphanalyzer.graph.Edge;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import com.democracyapps.cnp.graphanalyzer.graph.Node;
-import org.json.simple.JSONObject;
+import com.democracyapps.cnp.graphanalyzer.miscellaneous.ParameterSet;
 
-import java.math.BigDecimal;
 import java.sql.*;
 
-public class CNPPostgresDataProvider extends DataProvider {
+public class DBGraphDataProvider extends DataProvider {
+    private CNPDatabaseAccessor databaseAccessor = null;
 
     @Override
-    public void initialize(JSONObject configuration) throws Exception {
-
-        System.out.println("Testing JDBC Postgres connection");
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new Exception("Can't find PostgreSQL JDBC Driver");
-        }
-
-        // Just verify that we can establish the connection
-        Connection connection = openConnection();
-        closeConnection(connection);
-    }
-
-    private static Connection openConnection() throws SQLException {
-        Connection connection = null;
-
-        connection = DriverManager.getConnection(
-                "jdbc:postgresql://cnp.dev:5432/cnp", "ga",
-                "graph01");
-
-        if (connection == null) {
-            throw new SQLException("Unable to create connection to PostgreSQL database");
-        }
-        return connection;
-    }
-
-    private static void closeConnection(Connection connection) throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
+    public void initialize(Workspace workspace, ParameterSet parameters) throws Exception {
+        super.initialize(workspace, parameters);
+        databaseAccessor = workspace.getDatabaseAccessor();
     }
 
     @Override
-    public Object getData() throws SQLException {
-        Connection c = openConnection();
+    public Graph getData() throws Exception {
+        Connection c = databaseAccessor.openConnection();
         Statement stmt = null;
         Graph g = null;
 
@@ -83,9 +56,8 @@ public class CNPPostgresDataProvider extends DataProvider {
         }
         rs.close();
         stmt.close();
-        //public Edge (long id, int type, long from, long to, String content) {
 
-        closeConnection(c);
+        databaseAccessor.closeConnection();
         return g;
     }
 }

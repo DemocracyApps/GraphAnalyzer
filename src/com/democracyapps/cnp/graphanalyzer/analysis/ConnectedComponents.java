@@ -1,10 +1,8 @@
-package com.democracyapps.cnp.graphanalyzer.analyses;
+package com.democracyapps.cnp.graphanalyzer.analysis;
 
 import com.democracyapps.cnp.graphanalyzer.graph.AdjMatrixGraph;
 import com.democracyapps.cnp.graphanalyzer.graph.Node;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by Hanna on 1/11/15.
