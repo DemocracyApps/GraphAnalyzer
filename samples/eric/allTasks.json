@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "Perky",
-      "project": -1,
+      "project": 1,
       "dataSourceType":"db",
       "analysis": {
         "type": "HannaTest",

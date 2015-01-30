@@ -39,7 +39,7 @@ public class RandomGraphDataProvider extends DataProvider {
                 long id = rand.nextLong();
                 int type = 1;
                 String content = "Node content";
-                Node n = new Node(id, type, content);
+                Node n = new Node(id, type, null, content);
                 g.addNode(n);
             }
             ArrayList<Node> nodes = g.getAllNodes();

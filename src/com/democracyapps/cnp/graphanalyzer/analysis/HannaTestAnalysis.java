@@ -26,7 +26,7 @@ public class HannaTestAnalysis extends Analysis {
             dataSet = workspace.getDataCache().getDataSet(dataSetId);
             adjMatrixGraph = new AdjMatrixGraph(dataSet.getGraph());
         } catch (Exception e) {
-            workspace.logger.severe("There was a problem: " + e.getMessage());
+            workspace.logger.severe("There was a problem running the HannaTestAnalysis: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }

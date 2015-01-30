@@ -45,6 +45,7 @@ public class ParameterSet extends JSONObject {
     public Object put (Object key, Object value) {
         return super.put(key, value);
     }
+
     public void addParameter(String space, String key, Object value) throws Exception {
         JSONObject config = this;
         if (space != null) config = (JSONObject) resolve(space, true);
@@ -60,8 +61,20 @@ public class ParameterSet extends JSONObject {
     }
 
     public Integer getIntegerParam (String key) throws Exception {
-        Long value = (Long) resolve(key, false);
-        return value.intValue();
+        Object object = resolve(key, false);
+        String className = object.getClass().getName();
+        Integer value = null;
+        if (className.equalsIgnoreCase("java.lang.Long")) {
+            Long lvalue = (Long) object;
+            value = lvalue.intValue();
+        }
+        else if (className.equalsIgnoreCase("java.lang.Integer")) {
+            value = (Integer) object;
+        }
+        else {
+            throw new Exception("Unknown object type: " + className);
+        }
+        return value;
     }
 
     public Boolean getBooleanParam (String key) throws Exception {

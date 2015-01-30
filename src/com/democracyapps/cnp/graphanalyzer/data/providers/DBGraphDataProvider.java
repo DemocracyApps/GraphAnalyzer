@@ -21,43 +21,64 @@ public class DBGraphDataProvider extends DataProvider {
     @Override
     public Graph getData() throws Exception {
         Connection c = databaseAccessor.openConnection();
-        Statement stmt = null;
-        Graph g = null;
-
         c.setAutoCommit(false);
-        stmt = c.createStatement();
+        ResultSet rs;
 
-        ResultSet rs = stmt.executeQuery("SELECT * FROM ELEMENTS;");
+        PreparedStatement selectElements = null, selectRelations = null;
 
-        g = new Graph();
+        Integer project = parameters.getIntegerParam("project");
 
-        while (rs.next()) {
-            long id = rs.getBigDecimal("id").longValue();
-            int type = rs.getInt("type");
-            String content = rs.getString("content");
-            System.out.println("ID: " + id + ", Type: " + type + ", Content: " + content);
-            Node n = new Node (id, type, content);
-            g.addNode(n);
+        String elementFields = "elements.id, elements.type, elements.name, elements.content";
+        String relationFields = "id, fromid, toid, relationid";
+
+        if (project <= 0) {
+            String stmt = "SELECT " + elementFields + " FROM ELEMENTS;";
+            selectElements = c.prepareStatement(stmt);
+            stmt = "SELECT " + relationFields + " FROM RELATIONS;";
+            selectRelations = c.prepareStatement(stmt);
         }
-        rs.close();
-        stmt.close();
-
-        stmt = c.createStatement();
-        rs = stmt.executeQuery("SELECT * FROM RELATIONS;");
-        while (rs.next()) {
-            long id = rs.getBigDecimal("id").longValue();
-            int type = rs.getInt("relationid");
-            long from = rs.getBigDecimal("fromid").longValue();
-            long to = rs.getBigDecimal("toid").longValue();
-
-            System.out.println("Relation ID: " + id + ", Type: " + type + ", from/to: " + from + "/" + to);
-            Edge e = new Edge (id, type, from, to, null);
-            g.addEdge(e);
+        else {
+            String stmt = "SELECT DISTINCT " + elementFields + " FROM ELEMENTS ";
+            stmt += "INNER JOIN RELATIONS ON RELATIONS.FROMID=ELEMENTS.ID WHERE RELATIONS.PROJECT=" + project + ";";
+            selectElements = c.prepareStatement(stmt);
+            stmt = "SELECT " + relationFields + " FROM RELATIONS WHERE PROJECT=" + project + ";";
+            selectRelations = c.prepareStatement(stmt);
         }
-        rs.close();
-        stmt.close();
 
-        databaseAccessor.closeConnection();
+        Graph g = new Graph();
+
+        // Get the Elements
+        try {
+            rs = selectElements.executeQuery();
+
+            while (rs.next()) {
+                long id = rs.getBigDecimal("id").longValue();
+                int type = rs.getInt("type");
+                Node n = new Node(id, type, rs.getString("name"), rs.getString("content"));
+                g.addNode(n);
+            }
+            rs.close();
+
+            rs = selectRelations.executeQuery();
+
+            while (rs.next()) {
+                long id = rs.getBigDecimal("id").longValue();
+                int type = rs.getInt("relationid");
+                long from = rs.getBigDecimal("fromid").longValue();
+                long to = rs.getBigDecimal("toid").longValue();
+
+                Edge e = new Edge(id, type, from, to, null);
+                g.addEdge(e);
+            }
+            rs.close();
+            c.commit();
+
+            databaseAccessor.closeConnection();
+        }
+        finally {
+            if (selectElements != null)  selectElements.close();
+            if (selectRelations != null) selectRelations.close();
+        }
         return g;
     }
 }
