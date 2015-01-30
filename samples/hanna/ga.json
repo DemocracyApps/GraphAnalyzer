@@ -4,5 +4,5 @@
   "dbConnection":"jdbc:postgresql://cnp.dev:5432/cnp",
   "dbUser":"ga",
   "dbPassword":"graph01",
-  "tasksFile":"allTasks.json"
+  "tasksFile":"generatorTasks.json"
 }
