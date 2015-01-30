@@ -11,6 +11,7 @@ import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 public class HannaTestAnalysis extends Analysis {
     AdjMatrixGraph adjMatrixGraph = null;
     DataSet dataSet = null;
+    Integer count = null;
 
     @Override
     public void initialize(Workspace w, ParameterSet p) {
@@ -19,8 +20,16 @@ public class HannaTestAnalysis extends Analysis {
 
     @Override
     public void run() {
-        dataSet = workspace.getDataCache().getDataSet(dataSetId);
-        adjMatrixGraph = new AdjMatrixGraph(dataSet.getGraph());
+        try {
+            count = parameters.getIntegerParam("analysis.count"); // Just as an example of how to access
+            System.out.println("The value of the count parameter is " + count);
+            dataSet = workspace.getDataCache().getDataSet(dataSetId);
+            adjMatrixGraph = new AdjMatrixGraph(dataSet.getGraph());
+        } catch (Exception e) {
+            workspace.logger.severe("There was a problem: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     @Override
