@@ -1,6 +1,7 @@
 package com.democracyapps.cnp.graphanalyzer.tasks;
 
 import com.democracyapps.cnp.graphanalyzer.data.DataCache;
+import com.democracyapps.cnp.graphanalyzer.data.filters.GraphFilter;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.JsonUtilities;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 import com.democracyapps.cnp.graphanalyzer.analysis.Analysis;
@@ -74,6 +75,9 @@ public class AnalysisTask extends Task {
             dataSetId = dataCache.loadDataSet(workspace, dataSourceType, dataSourceName, project, parameters);
 
             analysis.registerDataSet(dataSetId);
+            GraphFilter gf = new GraphFilter(parameters.getJSONObject("analysis.take"), parameters.getJSONObject("analysis.drop"));
+            analysis.registerFilter(gf);
+
             analysis.run();
             analysis.output();
 

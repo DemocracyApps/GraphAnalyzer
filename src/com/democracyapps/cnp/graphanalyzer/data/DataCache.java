@@ -5,6 +5,7 @@ import com.democracyapps.cnp.graphanalyzer.data.providers.DataProvider;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.ParameterSet;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
+import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 
@@ -42,6 +43,7 @@ public class DataCache {
         }
 
         Graph g = dp.getData();
+
         if (datasets == null) datasets = new HashMap<Integer, DataSet>();
         datasets.put(id, new DataSet(id, g));
         return id;

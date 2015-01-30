@@ -1,5 +1,7 @@
 package com.democracyapps.cnp.graphanalyzer.data;
 
+import com.democracyapps.cnp.graphanalyzer.data.filters.Filter;
+import com.democracyapps.cnp.graphanalyzer.data.filters.GraphFilter;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 
 /**
@@ -18,5 +20,16 @@ public class DataSet {
 
     public Graph getGraph() {
         return (Graph) data;
+    }
+
+    public Graph getGraph (GraphFilter filter) throws Exception {
+        Graph g = null;
+        if (filter == null || filter.isNull()) {
+            g = this.getGraph();
+        }
+        else {
+            throw new Exception("Filtering not implemented yet");
+        }
+        return g;
     }
 }

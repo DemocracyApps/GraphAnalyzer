@@ -8,10 +8,9 @@ import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 /**
  * Created by ericjackson on 1/29/15.
  */
-public class HannaTestAnalysis extends Analysis {
+public class TopTagsAnalysis extends Analysis {
     AdjMatrixGraph adjMatrixGraph = null;
     DataSet dataSet = null;
-    Integer count = null;
 
     @Override
     public void initialize(Workspace w, ParameterSet p) {
@@ -21,11 +20,12 @@ public class HannaTestAnalysis extends Analysis {
     @Override
     public void run() {
         try {
-            count = parameters.getIntegerParam("analysis.count"); // Just as an example of how to access
-            System.out.println("The value of the count parameter is " + count);
+            //count = parameters.getIntegerParam("analysis.count"); // Just as an example of how to access
+
+            dataSet = workspace.getDataCache().getDataSet(dataSetId);
             adjMatrixGraph = new AdjMatrixGraph(this.getGraph());
         } catch (Exception e) {
-            workspace.logger.severe("There was a problem running the HannaTestAnalysis: " + e.getMessage());
+            workspace.logger.severe("There was a problem running the TopTagsAnalysis: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
