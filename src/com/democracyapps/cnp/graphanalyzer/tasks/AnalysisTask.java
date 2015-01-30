@@ -33,10 +33,11 @@ public class AnalysisTask extends Task {
         analysis = createAnalysis();
     }
 
-    public AnalysisTask(Workspace workspace, String name, String analysisId, Integer projectId, String analysisSpecification) throws Exception {
+    public AnalysisTask(Workspace workspace, String name, Integer analysisId, Integer projectId, String analysisSpecification) throws Exception {
         super(workspace);
         parameters = new ParameterSet();
-        id = analysisId;
+        id = analysisId.toString();
+        this.name = name;
         project = projectId;
         dataSourceType = "db";
         parameters.put("id", id);
@@ -52,6 +53,8 @@ public class AnalysisTask extends Task {
         parameters.put("analysis", analysisSpec);
 
         analysis = createAnalysis();
+        analysis.setId(analysisId);
+        analysis.setProject(projectId);
     }
 
     private Analysis createAnalysis () throws Exception {

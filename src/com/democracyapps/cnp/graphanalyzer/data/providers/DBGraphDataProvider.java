@@ -28,8 +28,6 @@ public class DBGraphDataProvider extends DataProvider {
 
         Integer project = parameters.getIntegerParam("project");
 
-        System.out.println("Here with project = " + project);
-
         String elementFields = "elements.id, elements.type, elements.name, elements.content";
         String relationFields = "id, fromid, toid, relationid";
 

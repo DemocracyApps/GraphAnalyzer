@@ -10,12 +10,22 @@ import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
  * Created by ericjackson on 1/27/15.
  */
 abstract public class Analysis {
+    Integer id = null;
+    Integer project = null;
     Workspace workspace = null;
     ParameterSet parameters = null;
     Integer dataSetId = null;
     GraphFilter filter = null;
 
     public Analysis () {
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setProject (Integer id) {
+        this.project = id;
     }
 
     public void initialize (Workspace w, ParameterSet p) {

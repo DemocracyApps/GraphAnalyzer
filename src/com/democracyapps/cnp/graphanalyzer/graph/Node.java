@@ -16,4 +16,17 @@ public class Node {
     public long getId() {
         return this.id;
     }
+
+    public int getType() {
+        return this.type;
+    }
+
+    public String getRole() {
+        return this.role;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
 }

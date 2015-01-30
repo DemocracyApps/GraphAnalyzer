@@ -8,6 +8,7 @@ import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
 /**
  * Created by ericjackson on 1/29/15.
  */
+@SuppressWarnings("unused")
 public class HannaTestAnalysis extends Analysis {
     AdjMatrixGraph adjMatrixGraph = null;
     DataSet dataSet = null;

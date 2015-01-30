@@ -61,6 +61,32 @@ public class Graph {
         return result;
     }
 
+    public ArrayList<Node> getNodesByType (Integer type) {
+        ArrayList<Node> result = new ArrayList<Node>();
+        Iterator<Long> iter = this.nodes.keySet().iterator();
+        while (iter.hasNext()) {
+            Long id = iter.next();
+            Node n = this.nodes.get(id);
+            if (n.type == type) {
+                result.add(this.nodes.get(id));
+            }
+        }
+        return result;
+    }
+
+    public HashMap<Long, Integer> getNodeDegreeCounts() {
+        HashMap<Long,Integer> result = new HashMap<Long, Integer>();
+        Iterator<Long> iter = this.edges.keySet().iterator();
+        while (iter.hasNext()) {
+            Long id = iter.next();
+            Long from = this.edges.get(id).from;
+            if (! result.containsKey(from)) {
+                result.put(from, 0);
+            }
+            result.put(from, result.get(from) + 1);
+        }
+        return result;
+    }
 
     public int countEdges() {
         return this.edges.size();

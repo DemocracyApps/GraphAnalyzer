@@ -1,10 +1,10 @@
 {
   "type": "TopTags",
-  "cutoff": 10,
+  "cutoff": 2,
   "take": null,
   "drop": null,
   "target":
   {
-    "ElementRole":"Tag"
+    "ElementType":5
   }
 }
