@@ -44,8 +44,12 @@ public class HannaTestAnalysis extends Analysis {
         if (adjMatrixGraph.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
 
         adjMatrixGraph.printAdjMatrix();
-        System.out.println("there are currently " +
-                Integer.toString(dataSet.getGraph().countEdges()) + " edges");
+        try {
+            System.out.println("there are currently " +
+                    Integer.toString(this.getGraph().countEdges()) + " edges");
+        } catch (Exception e) {
+            workspace.logger.severe("Yikes - Hanna is a problem again: " + e.getMessage());
+        }
 
     }
 }

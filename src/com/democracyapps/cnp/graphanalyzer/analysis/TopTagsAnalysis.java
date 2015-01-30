@@ -139,7 +139,7 @@ public class TopTagsAnalysis extends Analysis {
                 ++count;
                 if (count > cutoff && cutoff > 0) break;
             }
-            
+
             c.commit();
             workspace.getDatabaseAccessor().closeConnection();
         }
