@@ -1,0 +1,18 @@
+{
+  "analyses": [
+    {
+      "id": "2",
+      "name": "Generator Test",
+      "project": -1,
+      "dataSourceType": "generator",
+      "dataSourceName": "RandomGraph",
+      "RandomGraph": {
+        "method": "Erdos"
+      },
+      "analysis": {
+        "type": "HannaTest",
+        "count": 17
+      }
+    }
+  ]
+}
