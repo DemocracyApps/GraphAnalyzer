@@ -1,0 +1,8 @@
+{
+  "type": "Random",
+  "count": 5,
+  "composers":[1,2],
+  "take": null,
+  "drop": null,
+  "target": null
+}

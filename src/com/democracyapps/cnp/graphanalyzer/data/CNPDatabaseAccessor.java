@@ -57,11 +57,11 @@ public class CNPDatabaseAccessor {
             ResultSet rs;
             String select, update;
             if (daemon) {
-                select = "SELECT id, name, project, specification FROM ANALYSES WHERE (last IS NULL OR last < updated_at) FOR UPDATE;";
-                update = "UPDATE ANALYSES SET last = ? WHERE (last IS NULL OR last < updated_at);";
+                select = "SELECT id, name, project, specification FROM PERSPECTIVES WHERE (last IS NULL OR last < updated_at) FOR UPDATE;";
+                update = "UPDATE PERSPECTIVES SET last = ? WHERE (last IS NULL OR last < updated_at);";
             } else {
-                select = "SELECT id, name, project, specification FROM ANALYSES FOR UPDATE;";
-                update = "UPDATE ANALYSES SET last = ? ;";
+                select = "SELECT id, name, project, specification FROM PERSPECTIVES FOR UPDATE;";
+                update = "UPDATE PERSPECTIVES SET last = ? ;";
             }
 
             selectStmt = c.prepareStatement(select);
@@ -73,9 +73,14 @@ public class CNPDatabaseAccessor {
 
             while (rs.next()) {
                 Integer id = rs.getInt("id");
-
-                allAnalysisTasks.add(new AnalysisTask(workspace, rs.getString("name"), id, rs.getInt("project"), rs.getString("specification")));
-
+                AnalysisTask task = null;
+                try {
+                    task = new AnalysisTask(workspace, rs.getString("name"), id, rs.getInt("project"), rs.getString("specification"));
+                    allAnalysisTasks.add(task);
+                }
+                catch (Exception e) {
+                    workspace.logger.severe("Error reading analysis task - skipping: " + e.getMessage());
+                }
             }
             rs.close();
 

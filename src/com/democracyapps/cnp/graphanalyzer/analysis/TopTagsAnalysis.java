@@ -86,7 +86,7 @@ public class TopTagsAnalysis extends Analysis {
             ResultSet rs;
 
             // Create the analysis output record
-            String stmt = "INSERT INTO analysis_outputs (analysis, project, output, created_at, updated_at) VALUES (?, ?, ?, ?, ?);";
+            String stmt = "INSERT INTO analysis_outputs (perspective, project, output, created_at, updated_at) VALUES (?, ?, ?, ?, ?);";
             insertOutput = c.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);
             insertOutput.setInt(1, this.id);
             insertOutput.setInt(2, this.project);

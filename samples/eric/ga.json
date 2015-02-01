@@ -1,5 +1,5 @@
 {
-  "tasksSource":"file",
+  "tasksSource":"db",
   "daemon":false,
   "dbConnection":"jdbc:postgresql://cnp.dev:5432/cnp",
   "dbUser":"ga",
