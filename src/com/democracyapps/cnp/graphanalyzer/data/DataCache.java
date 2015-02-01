@@ -17,11 +17,11 @@ public class DataCache {
     private HashMap<Integer,DataSet> datasets = null;
 
 
-    public DataSet getDataSet(Integer datasetId) {
+    public synchronized DataSet getDataSet(Integer datasetId) {
         return datasets.get(datasetId);
     }
 
-    public Integer loadDataSet(Workspace workspace, String dataSourceType, String dataSourceName, Integer project,
+    public synchronized Integer loadDataSet(Workspace workspace, String dataSourceType, String dataSourceName, Integer project,
                               ParameterSet parameters) throws Exception {
         Integer id = currentGraphId++;
         DataProvider dp = null;

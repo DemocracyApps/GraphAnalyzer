@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 public class CNPDatabaseAccessor {
@@ -14,6 +16,7 @@ public class CNPDatabaseAccessor {
     private String userName = null;
     private String password = null;
     private Logger logger = null;
+    private final Lock lock = new ReentrantLock();
 
     private Connection currentConnection = null;
 
@@ -30,7 +33,9 @@ public class CNPDatabaseAccessor {
         }
     }
 
-    public Connection openConnection() throws SQLException {
+    public synchronized Connection openConnection() throws SQLException {
+
+        lock.lock();
 
         currentConnection = DriverManager.getConnection(this.connectionString, this.userName, this.password);
 
@@ -45,6 +50,7 @@ public class CNPDatabaseAccessor {
         if (currentConnection != null) {
             currentConnection.close();
             currentConnection = null;
+            lock.unlock();
         }
     }
 
@@ -57,10 +63,10 @@ public class CNPDatabaseAccessor {
             ResultSet rs;
             String select, update;
             if (daemon) {
-                select = "SELECT id, name, project, specification FROM PERSPECTIVES WHERE (last IS NULL OR last < updated_at) FOR UPDATE;";
+                select = "SELECT id, name, project, specification FROM PERSPECTIVES WHERE (requires_analysis IS TRUE AND (last IS NULL OR last < updated_at)) FOR UPDATE;";
                 update = "UPDATE PERSPECTIVES SET last = ? WHERE (last IS NULL OR last < updated_at);";
             } else {
-                select = "SELECT id, name, project, specification FROM PERSPECTIVES FOR UPDATE;";
+                select = "SELECT id, name, project, specification FROM PERSPECTIVES WHERE (requires_analysis IS TRUE) FOR UPDATE;";
                 update = "UPDATE PERSPECTIVES SET last = ? ;";
             }
 

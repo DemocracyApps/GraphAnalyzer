@@ -40,11 +40,10 @@ public class TaskSet {
 
     public ArrayList<AnalysisTask> getTasksToRun() {
         ArrayList<AnalysisTask> tasks = new ArrayList<AnalysisTask>();
-        if (tasksById == null) {
-            logger.severe("Null tasksById");
-        }
-        for (AnalysisTask t: tasksById.values()) {
-            tasks.add(t);
+        if (tasksById != null) {
+            for (AnalysisTask t : tasksById.values()) {
+                tasks.add(t);
+            }
         }
         return tasks;
     }

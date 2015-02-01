@@ -1,5 +1,6 @@
 package com.democracyapps.cnp.graphanalyzer.analysis;
 
+import com.democracyapps.cnp.graphanalyzer.data.DataCache;
 import com.democracyapps.cnp.graphanalyzer.data.DataSet;
 import com.democracyapps.cnp.graphanalyzer.data.filters.GraphFilter;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
@@ -39,7 +40,11 @@ abstract public class Analysis {
     public void registerFilter (GraphFilter gf) { filter = gf; }
 
     public Graph getGraph () throws Exception {
-        DataSet ds = workspace.getDataCache().getDataSet(dataSetId);
+        DataSet ds;
+        DataCache dc = workspace.getDataCache();
+        if (dc == null) throw new Exception ("No damn datacache!");
+        ds = dc.getDataSet(dataSetId);
+        if (ds == null) throw new Exception ("No damn data set with id " + dataSetId);
         return ds.getGraph(filter);
     }
     abstract public void run();
