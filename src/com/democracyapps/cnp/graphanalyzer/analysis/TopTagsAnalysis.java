@@ -1,12 +1,9 @@
 package com.democracyapps.cnp.graphanalyzer.analysis;
 
-import com.democracyapps.cnp.graphanalyzer.data.DataSet;
-import com.democracyapps.cnp.graphanalyzer.graph.AdjMatrixGraph;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import com.democracyapps.cnp.graphanalyzer.graph.Node;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.ParameterSet;
 import com.democracyapps.cnp.graphanalyzer.miscellaneous.Workspace;
-import com.democracyapps.cnp.graphanalyzer.tasks.AnalysisTask;
 import org.json.simple.JSONObject;
 
 import java.sql.*;
