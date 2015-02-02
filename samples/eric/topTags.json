@@ -1,6 +1,7 @@
 {
   "type": "TopTags",
   "cutoff": 2,
+  "advancedView":true,
   "take": null,
   "drop": null,
   "target":
