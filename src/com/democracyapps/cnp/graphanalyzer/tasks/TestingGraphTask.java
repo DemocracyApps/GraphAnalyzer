@@ -31,15 +31,6 @@ public class TestingGraphTask extends Task {
         graph = (Graph)gdp.getData();
         AdjMatrixGraph adjMatrixGraph = new AdjMatrixGraph(graph);
 
-        adjMatrixGraph.printNodes();
-        if (adjMatrixGraph.isDirected()) {System.out.println("graph is directed"); } else {System.out.println("graph is not directed");}
-        adjMatrixGraph.setDirected(false);
-        if (adjMatrixGraph.isDirected()) {System.out.println("graph is directed"); } else {System.out.println("graph is not directed");}
-        adjMatrixGraph.setWeighted(true);
-        if (adjMatrixGraph.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
-        adjMatrixGraph.setWeighted(false);
-        if (adjMatrixGraph.isWeighted()) {System.out.println("graph is weighted"); } else {System.out.println("graph is not weighted");}
-
         adjMatrixGraph.printAdjMatrix();
         System.out.println("there are currently " +
                 Integer.toString(graph.countEdges()) + " edges");

@@ -6,12 +6,15 @@ import com.democracyapps.cnp.graphanalyzer.dataproviders.CNPPostgresDataProvider
 import com.democracyapps.cnp.graphanalyzer.dataproviders.DataProvider;
 import com.democracyapps.cnp.graphanalyzer.dataproviders.GraphDataProvider;
 import com.democracyapps.cnp.graphanalyzer.graph.AdjMatrixGraph;
+import com.democracyapps.cnp.graphanalyzer.graph.AdjList;
 import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import com.democracyapps.cnp.graphanalyzer.graph.Node;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 public class GraphAnalysisTask extends Task {
@@ -69,26 +72,15 @@ public class GraphAnalysisTask extends Task {
                 AdjMatrixGraph adjMatrixGraph = new AdjMatrixGraph(graph);
                 adjMatrixGraph.printAdjMatrix();
             } else if (analysisType.equalsIgnoreCase("maxdegree")) {
-                AdjMatrixGraph adjMatrixGraph = new AdjMatrixGraph(graph);
-                ArrayList<Node> nodes = adjMatrixGraph.getAllNodes();
-                double[][] adjMatrix = adjMatrixGraph.getAdjMatrix();
-                int i,j;
-                int numNodes = adjMatrixGraph.getNumNodes();
-                int maxDegree = 0;
-                Node maxDegreeNode = nodes.get(0);
-                int[] degree = new int[numNodes];
-                for (i=0; i<numNodes; i++) {
-                    int nodeDegree = 0;
-                    for (j=0; j<numNodes; j++) {
-                        nodeDegree += adjMatrix[i][j];
-                    }
-                    degree[i] = nodeDegree;
-                    if (nodeDegree > maxDegree) {
-                        maxDegree = nodeDegree;
-                        maxDegreeNode = nodes.get(i);
-                    }
+                AdjList adjList = new AdjList(graph);
+                Comparator<Node> comp = new DegreeComparator();
+                PriorityQueue Q = new PriorityQueue(10,comp);
+                ArrayList<Node> nodes = adjList.getNodeOrder();
+                for (Node n : nodes) {
+                     Q.add(n);
                 }
-                System.out.println("Maximum degree is " + Integer.toString(maxDegree)
+                Node maxDegreeNode = (Node)Q.poll();
+                System.out.println("Maximum degree is " + Integer.toString(maxDegreeNode.getDegree())
                         + " at node " + Long.toString(maxDegreeNode.getId()));
             }
         }

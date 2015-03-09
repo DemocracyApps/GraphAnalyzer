@@ -1,6 +1,8 @@
 package com.democracyapps.cnp.graphanalyzer.analyses;
 
+import com.democracyapps.cnp.graphanalyzer.graph.AdjList;
 import com.democracyapps.cnp.graphanalyzer.graph.AdjMatrixGraph;
+import com.democracyapps.cnp.graphanalyzer.graph.Graph;
 import com.democracyapps.cnp.graphanalyzer.graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,17 +16,17 @@ public class ConnectedComponents {
     ArrayList<Node> nodes;
     int numNodes;
     boolean[] visited = new boolean[numNodes];
-    double[][] adjMatrix;
+    AdjMatrixGraph adjMatrix;
 
 
-    public ConnectedComponents(AdjMatrixGraph g) {
-        adjMatrix = g.getAdjMatrix();
-        numNodes = g.getNumNodes();
+    public ConnectedComponents(Graph g) {
+        adjMatrix = new AdjMatrixGraph(g);
+        numNodes = g.countNodes();
         nodes = g.getAllNodes();
 
         }
 
-       /* private ArrayList<Node[]> breadthFirstSearch() {
+        /*private ArrayList<Node[]> breadthFirstSearch() {
             Queue<Integer> queue = new LinkedList<Integer>();
             int i, j, numConnectedComponents;
             numConnectedComponents = 0;

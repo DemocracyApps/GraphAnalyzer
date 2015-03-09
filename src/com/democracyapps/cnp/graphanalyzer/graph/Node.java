@@ -4,6 +4,7 @@ public class Node {
     long id;
     int type;
     String content = null;
+    int degree = 0;
 
     public Node (long id, int type, String content) {
         this.id = id;
@@ -13,5 +14,13 @@ public class Node {
 
     public long getId() {
         return this.id;
+    }
+
+    public void setDegree(int d){
+        this.degree = d;
+    }
+
+    public int getDegree(){
+        return this.degree;
     }
 }

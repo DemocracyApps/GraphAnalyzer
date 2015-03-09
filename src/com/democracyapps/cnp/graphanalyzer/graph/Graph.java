@@ -7,21 +7,22 @@ import java.util.Iterator;
 public class Graph {
     HashMap<Long, Node> nodes = null;
     HashMap<Long, Edge> edges = null;
+    Boolean directed = true;
 
     public Graph() {
         nodes = new HashMap<Long, Node>();
         edges = new HashMap<Long, Edge>();
     }
 
-    public void addNode (Node n) {
+    public void addNode(Node n) {
         nodes.put(n.id, n);
     }
 
-    public void addEdge (Edge e) {
+    public void addEdge(Edge e) {
         edges.put(e.id, e);
     }
 
-    public void removeEdge (Edge e) {
+    public void removeEdge(Edge e) {
         edges.remove(e.id);
     }
 
@@ -60,7 +61,6 @@ public class Graph {
         }
         return result;
     }
-
 
     public int countEdges() {
         return this.edges.size();

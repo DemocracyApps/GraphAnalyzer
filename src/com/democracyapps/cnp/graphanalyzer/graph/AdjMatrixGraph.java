@@ -11,48 +11,23 @@ import java.util.Iterator;
  */
 
 
-public class AdjMatrixGraph extends Graph{
-
-    private boolean directed;
-    private boolean weighted;
+public class AdjMatrixGraph {
     private int numNodes;
     private ArrayList<Long> nodeOrder;
     private double[][] adjMatrix;
-
-    public AdjMatrixGraph(boolean directedGraph, boolean weightedGraph) {
-        directed = directedGraph;
-        weighted = weightedGraph;
-        nodeOrder = null;
-        nodes = new HashMap<Long, Node>();
-        edges = new HashMap<Long, Edge>();
-        numNodes = this.nodes.size();
-        adjMatrix = new double[numNodes][numNodes];
-    }
-
+    private boolean directed;
     public AdjMatrixGraph(Graph g) {
-        directed = false;
-        weighted = false;
-        this.nodes = g.nodes;
-        this.edges = g.edges;
-        numNodes = nodes.size();
+        directed = g.directed;
+        numNodes = g.nodes.size();
         adjMatrix = new double[numNodes][numNodes];
         nodeOrder = new ArrayList<Long>();
-        for(long n : nodes.keySet()) {
+        for(long n : g.nodes.keySet()) {
             nodeOrder.add(n);
         }
-        for(Edge e : edges.values()) {
+        for(Edge e : g.edges.values()) {
             addEdge(e);
         }
     }
-
-    public boolean isDirected() {
-        return directed;
-    }
-
-    public boolean isWeighted() {
-        return  weighted;
-    }
-
     public void setDirected(boolean bool) {
         if (bool) {
             directed = true;
@@ -75,62 +50,22 @@ public class AdjMatrixGraph extends Graph{
             directed = false;
         }
     }
-
-    public void setWeighted(boolean bool) {
-        if (bool) {
-            weighted = true;
-        } else {
-            if (weighted) {
-                int i, j;
-                for (i = 0; i < numNodes; i++) {
-                    for (j = 0; j < numNodes; j++) {
-                        if (adjMatrix[i][j] > 0) {
-                            adjMatrix[i][j] = 1;
-                        }
-                    }
-                }
-            }
-            weighted = false;
-        }
-
-    }
-
-    @Override
-    public void addEdge (Edge e) {
-        // for unweighted graphs
-        edges.put(e.id, e);
-        int ind1 = nodeOrder.indexOf(e.from);
-        int ind2 = nodeOrder.indexOf(e.to);
-        if ((ind1 == -1)||(ind2 == -1)) {
-            System.out.println("These two nodes aren't in the graph.");
-        }
-        if (directed) {
-            adjMatrix[ind1][ind2] = 1;
-        } else {
-            adjMatrix[ind1][ind2] = 1;
-            adjMatrix[ind2][ind1] = 1;
-        }
-    }
-
     public void addEdge (Edge e, double weight) {
-        // for weighted graphs
-        if (!weighted && weight<1) {
-            System.out.println("warning: weighted edge in an unweighted graph");
-        }
         int ind1 = nodeOrder.indexOf(e.from);
         int ind2 = nodeOrder.indexOf(e.to);
-        if ((ind1 == -1)||(ind2 == -1)) {
-            System.out.println("These two nodes aren't in the graph.");
-        }
-        if (directed) {
-            adjMatrix[ind1][ind2] = weight;
-        } else {
-            adjMatrix[ind1][ind2] = weight;
-            adjMatrix[ind2][ind1] = weight;
+        if ((ind1 == -1) || (ind2 == -1)) {
+            System.out.println("These two nodes are not in the graph.");
+            if (directed) {
+                adjMatrix[ind1][ind2] = weight;
+            } else {
+                adjMatrix[ind1][ind2] = weight;
+                adjMatrix[ind2][ind1] = weight;
+            }
         }
     }
-
-    @Override
+    public void addEdge (Edge e) {
+        addEdge(e, 1);
+    }
     public void removeEdge (Edge e) {
         int ind1 = nodeOrder.indexOf(e.from);
         int ind2 = nodeOrder.indexOf(e.to);
@@ -143,22 +78,18 @@ public class AdjMatrixGraph extends Graph{
             adjMatrix[ind1][ind2] = 0;
             adjMatrix[ind2][ind1] = 0;
         }
-        edges.remove(e.id);
     }
-
-    public void updateMatrix () {
-        // must run after adding new nodes before new edges can be added
-        double[][] oldAdjMatrix = adjMatrix;
+    public void updateMatrix () {       // must run after adding new nodes before new edges can be added 
+       double[][] oldAdjMatrix = adjMatrix;
         adjMatrix = new double[numNodes][numNodes];
         int i,j;
         for (i=0; i<oldAdjMatrix.length; i++) {
-            for (j=0; j<oldAdjMatrix.length; j++) {
-                double w = oldAdjMatrix[i][j];
-                adjMatrix[i][j] = w;
-            }
+          for (j=0; j<oldAdjMatrix.length; j++) {
+            double w = oldAdjMatrix[i][j];
+       adjMatrix[i][j] = w;
+          }
         }
     }
-
     public void printAdjMatrix() {
         int i, j;
         for (i = 0; i < numNodes; i++) {
@@ -168,22 +99,8 @@ public class AdjMatrixGraph extends Graph{
             System.out.print("\n");
         }
     }
-
-    public void printNodes() {
-        for (Long i : nodeOrder) {
-            System.out.println(nodes.get(i).content);
-        }
-        System.out.println("there are " + Integer.toString(numNodes) + " nodes");
-
+    public ArrayList<Long> getNodeOrder() {
+        return nodeOrder;
     }
-
-    public int getNumNodes() {
-        return  numNodes;
-    }
-
-    public double[][] getAdjMatrix() {
-        return adjMatrix;
-    }
-
 }
 
